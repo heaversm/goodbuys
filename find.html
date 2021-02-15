@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="bootstrap.min.css"/>
+    <title>Good Buys Values Search</title>
+    <link rel="stylesheet" href="find.css"/>
+  </head>
+  <body>
+    <div class="container">
+      <h3>Good Buys Values Search</h3>
+      <p>Search the page for content that matches your values</p>
+      <p><small>(this tab is excluded from the search.)</small></p>
+      <form id="find-form">
+        <div class="form-group" id="form">
+          <input type="text" class="form-control" id="find-input" placeholder="Enter content">
+        </div>
+      <button type="submit" class="btn btn-default">Find</button>
+      </form>
+      <hr>
+      <div id="results-container">
+        <h3>Results</h3>
+        <ul id="result-list"></ul>
+      </div>
+      <button id="close-window">CLOSE WINDOW</button>
+      
+    </div>
+    <script src="find.js"></script>
+  </body>
+</html>
