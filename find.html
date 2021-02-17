@@ -10,18 +10,33 @@
   <body>
     <div class="container">
       <h3>Good Buys Values Search</h3>
-      <p>Search the page for content that matches your values</p>
-      <p><small>(this tab is excluded from the search.)</small></p>
+      <p>Set the weight of each category's importance to you using the sliders below</p>
       <form id="find-form">
-        <div class="form-group" id="form">
-          <input type="text" class="form-control" id="find-input" placeholder="Enter content">
+        <div class="form-group" class="form-group">
+          <!--<input type="text" class="form-control" id="find-input" placeholder="Enter content">-->
+          <label for="environment">Environmentally Conscious</label>
+          <input type="range" min="1" max="100" value="50" data-id="environment" class="form-control-range" id="environment">
+        </div>
+        <div class="form-group" class="form-group">
+          <!--<input type="text" class="form-control" id="find-input" placeholder="Enter content">-->
+          <label for="small_business">Supports Independent, Female, and Minority Owned Businesses</label>
+          <input type="range" min="1" max="100" value="50" data-id="small_business" class="form-control-range" id="small_business">
+        </div>
+        <div class="form-group" class="form-group">
+          <!--<input type="text" class="form-control" id="find-input" placeholder="Enter content">-->
+          <label for="privacy">Protects My Security and Privacy</label>
+          <input type="range" min="1" max="100" value="50" data-id="privacy" class="form-control-range" id="privacy">
         </div>
       <button type="submit" class="btn btn-default">Find</button>
       </form>
       <hr>
       <div id="results-container">
         <h3>Results</h3>
-        <ul id="result-list"></ul>
+        <ul id="result-list">
+          <li class="score-item" data-id="environment">Environment Score: <span class="score"></span></li>
+          <li class="score-item" data-id="small_business">Small Business Score: <span class="score"></span></li>
+          <li class="score-item" data-id="privacy">Privacy Score: <span class="score"></span></li>
+        </ul>
       </div>
       <button id="close-window">CLOSE WINDOW</button>
       
