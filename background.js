@@ -1,7 +1,7 @@
 let clickedTab;
 
 async function find(query, catID) {
-  browser.runtime.sendMessage({ msg: "clear-results" });
+  //browser.runtime.sendMessage({ msg: "clear-results" });
 
   // If you don't exclude the current tab, every search will find a hit on the
   // current page.
@@ -44,6 +44,7 @@ async function find(query, catID) {
         tabId: tab.id,
       });
     }
+    browser.runtime.sendMessage({ msg: "next-term" });
   }
 }
 

@@ -1,9 +1,8 @@
-let backgroundPage = browser.extension.getBackgroundPage();
-
 const VALUES_DATA = {
   environment: [
     "sustainability",
     "biodiversity",
+    "solar",
     "pollutant",
     "organic",
     "pollution",
@@ -138,6 +137,8 @@ const VALUES_DATA = {
   ],
 };
 
+let backgroundPage = browser.extension.getBackgroundPage();
+
 let valueWeights = {
   environment: { weight: 50, count: 0 },
   small_business: {
@@ -147,20 +148,29 @@ let valueWeights = {
   privacy: { weight: 50, count: 0 },
 };
 
+let curCat = 0;
+let curTerm = 0;
+let curID;
 let resultsFound = false; //true when we have at least one match
+
+let results = document.getElementById("result-list");
+let resultsContainer = document.getElementById("results-container");
 
 document.getElementById("find-form").addEventListener("submit", function (e) {
   // Send the query from the form to the background page.
-  document.querySelectorAll(".form-control-range").forEach((rangeSlider, i) => {
-    const thisID = rangeSlider.dataset.id;
-    valueWeights[thisID].weight = rangeSlider.value;
-    for (let i = 0; i < VALUES_DATA[thisID].length; i++) {
-      const thisTerm = VALUES_DATA[thisID][i];
-      backgroundPage.find(thisTerm, thisID);
-    }
-  });
+  // document.querySelectorAll(".form-control-range").forEach((rangeSlider, i) => {
+  //   if (i === 0) {
+  //     const thisID = rangeSlider.dataset.id;
+  //     valueWeights[thisID].weight = rangeSlider.value;
+  //     for (let j = 0; j < VALUES_DATA[thisID].length; j++) {
+  //       const thisTerm = VALUES_DATA[thisID][j];
+  //       backgroundPage.find(thisTerm, thisID);
+  //     }
+  //   }
+  // });
   //backgroundPage.find(document.getElementById("find-input").value);
 
+  conductSearch();
   e.preventDefault();
 });
 
@@ -169,8 +179,34 @@ document.getElementById("close-window").addEventListener("click", function (e) {
   e.preventDefault();
 });
 
-let results = document.getElementById("result-list");
-let resultsContainer = document.getElementById("results-container");
+function conductSearch() {
+  const rangeSlider = document.querySelectorAll(".form-control-range")[curCat];
+  curID = rangeSlider.dataset.id;
+  valueWeights[curID].weight = rangeSlider.value;
+  const thisTerm = VALUES_DATA[curID][curTerm];
+  backgroundPage.find(thisTerm, curID);
+}
+
+function handleNextTerm() {
+  console.log(curTerm, VALUES_DATA[curID].length);
+  if (curTerm < VALUES_DATA[curID].length - 1) {
+    curTerm++;
+    conductSearch();
+  } else {
+    curTerm = 0;
+    if (curCat < 2) {
+      //TODO: get actual count of VALUES_DATA
+      curCat++;
+      conductSearch();
+    } else {
+      handleFinishedSearching();
+    }
+  }
+}
+
+function handleFinishedSearching() {
+  //TODO: all finished searching
+}
 
 function handleMessage(request, sender, response) {
   // Handle responses coming back from the background page.
@@ -178,7 +214,6 @@ function handleMessage(request, sender, response) {
     results.innerHTML = "";
   }
   if (request.msg === "found-result") {
-    //console.log(request);
     if (resultsFound === false) {
       resultsFound = true;
       resultsContainer.classList.toggle("active", true);
@@ -190,9 +225,12 @@ function handleMessage(request, sender, response) {
     //li.innerHTML = `${request.count} result(s) found on <a href="${request.url}">this page</a> `;
     //results.appendChild(li);
     const curScore = thisVal.count * (thisVal.weight / 100);
-    document.querySelector(
-      `.score-item[data-id="${request.catID}"] .score`
-    ).innerText = `${curScore}`;
+    const selector = `.${request.catID}_score`;
+    document.querySelector(selector).innerHTML = `${curScore}`;
+  }
+
+  if (request.msg === "next-term") {
+    handleNextTerm();
   }
 
   if (request.msg === "debug") {
