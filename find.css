@@ -5,3 +5,8 @@
 #results-container.active {
   display: block;
 }
+
+.term {
+  margin-left: 20px;
+  color: green;
+}

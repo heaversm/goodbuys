@@ -39,6 +39,7 @@ async function find(query, catID) {
         url: tab.url,
         count: result.count,
         catID: catID,
+        term: query,
       });
       browser.find.highlightResults({
         tabId: tab.id,

@@ -1,3 +1,9 @@
+/*
+an environment article: 
+a balanced article: http://www.oecd.org/coronavirus/policy-responses/e-commerce-in-the-time-of-covid-19-3a2b78e8/
+black product page: https://www.amazon.com/dp/B08QRT97Y8https://www.amazon.com/dp/B08QRT97Y8
+*/
+
 const VALUES_DATA = {
   environment: [
     "sustainability",
@@ -206,6 +212,10 @@ function handleNextTerm() {
 
 function handleFinishedSearching() {
   //TODO: all finished searching
+  console.log("done");
+  document.querySelectorAll(".term").forEach((term) => {
+    term.innerHTML = "";
+  });
 }
 
 function handleMessage(request, sender, response) {
@@ -227,6 +237,8 @@ function handleMessage(request, sender, response) {
     const curScore = thisVal.count * (thisVal.weight / 100);
     const selector = `.${request.catID}_score`;
     document.querySelector(selector).innerHTML = `${curScore}`;
+    const termSelector = `.${request.catID}_term`;
+    document.querySelector(termSelector).innerHTML = `${request.term}`;
   }
 
   if (request.msg === "next-term") {
